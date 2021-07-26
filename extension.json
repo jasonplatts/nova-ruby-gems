@@ -1,54 +1,71 @@
 {
-    "identifier": "jasonplatts.rubygems",
-    "name": "Ruby Gems",
-    "organization": "Jason Platts",
-    "description": "Lorem ipsum, dolor sit amet.",
-    "version": "1.0",
-    "categories": ["sidebars"],
+  "identifier": "jasonplatts.rubygems",
+  "name": "Ruby Gems",
+  "organization": "Jason Platts",
+  "description": "Provides a sidebar with information on gems contained in a project's Gemfile, including alerting the user to outdated versions.",
+  "version": "1.0",
+  "categories": ["sidebars"],
 
-    "main": "main.js",
+  "main": "main.js",
 
-    "activationEvents": [
-        "*"
-    ],
+  "activationEvents": [
+    "*"
+  ],
 
-    "entitlements": {
-        "filesystem": "readwrite", "requests": true
-    },
+  "entitlements": {
+    "filesystem": "readwrite",
+    "requests": true
+  },
 
-    "sidebars": [
+  "config-workspace": [
+    {
+      "key": "rubygems.config.section",
+      "title": "Gemfile Location",
+      "type": "section",
+      "children": [
         {
-            "id": "ruby-gems",
-            "name": "Ruby Gems",
-            "smallImage": "sidebar-small",
-            "largeImage": "sidebar-large",
-            "sections": [
-                {
-                    "id": "rubygems",
-                    "name": "Installed Ruby Gems",
-                    "placeholderText": "No gemfile detected.",
-                    "placeholderImage": "extension500w",
-                    "headerCommands": [
-                        {
-                            "title": "Open Docs",
-                            "tooltip": "Open RubyGems.org site in the browser.",
-                            "command": "openRubyGems.add"
-                        }
-                    ],
-                    "contextCommands": [
-                        {
-                            "title": "Remove",
-                            "command": "mysidebar.remove",
-                            "when": "viewItem != null"
-                        },
-                        {
-                            "title": "Show in Finder",
-                            "command": "mysidebar.showInFinder",
-                            "when": "viewItem != null"
-                        }
-                    ]
-                }
-            ]
+          "key": "rubygems.workspace.gemfileLocation",
+          "title": "Gemfile Location",
+          "description": "The extension automatically searches for a 'Gemfile' within the current workspace. If you wish to specify its location, you may do so here.",
+          "type": "path"
         }
-    ]
+      ]
+    }
+  ],
+
+  "sidebars": [
+    {
+      "id": "ruby-gems",
+      "name": "Ruby Gems",
+      "smallImage": "sidebar-small",
+      "largeImage": "sidebar-large",
+      "sections": [
+        {
+          "id": "rubygems",
+          "name": "Installed Ruby Gems",
+          "placeholderText": "No gemfile detected.",
+          "placeholderImage": "extension500w",
+          "headerCommands": [
+            {
+              "title": "Open Docs",
+              "tooltip": "Open RubyGems.org site in the browser.",
+              "command": "openRubyGems.add"
+            }
+          ],
+          "contextCommands": [
+            {
+              "title": "Remove",
+              "command": "mysidebar.remove",
+              "when": "viewItem != null"
+            },
+            {
+              "title": "Show in Finder",
+              "command": "mysidebar.showInFinder",
+              "when": "viewItem != null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

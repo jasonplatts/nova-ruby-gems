@@ -1,40 +1,43 @@
+'use strict'
 
-var treeView = null
+const FUNCTIONS         = require('./functions.js')
+const { Configuration } = require('./configuration.js')
+const { List }          = require('./list.js')
 
+var config     = null
+var gemList    = null
+var treeView   = null
 
 exports.activate = function() {
-  console.clear()
-  // Do work when the extension is activated
+  if (nova.inDevMode()) {
+    console.clear()
+    console.log('RUBY GEMS -- DEVELOPMENT MODE')
+  }
 
+  config  = new Configuration()
+  gemList = new List()
+
+  try {
+    config.loadGemfile()
+  } catch (error) {
+    FUNCTIONS.showConsoleError(error)
+  }
+
+  // fetchRubyGems()
+}
+
+exports.deactivate = function() {
+  // Clean up state before the extension is deactivated
+}
+
+async function registerTreeView() {
   // Create the TreeView
   treeView = new TreeView('rubygems', {
     dataProvider: new FruitDataProvider()
   })
 
-  treeView.onDidChangeSelection((selection) => {
-    // console.log("New selection: " + selection.map((e) => e.name));
-  })
-
-  treeView.onDidExpandElement((element) => {
-    // console.log("Expanded: " + element.name);
-  })
-
-  treeView.onDidCollapseElement((element) => {
-    // console.log("Collapsed: " + element.name);
-  })
-
-  treeView.onDidChangeVisibility(() => {
-    // console.log("Visibility Changed");
-  })
-
   // TreeView implements the Disposable interface
   nova.subscriptions.add(treeView)
-
-  fetchRubyGems()
-}
-
-exports.deactivate = function() {
-  // Clean up state before the extension is deactivated
 }
 
 async function fetchRubyGems() {
@@ -56,7 +59,6 @@ nova.commands.register('mysidebar.doubleClick', () => {
   let selection = treeView.selection
   console.log('DoubleClick: ' + selection.map((e) => e.name))
 })
-
 
 class FruitItem {
   constructor(name) {
