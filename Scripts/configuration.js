@@ -35,7 +35,6 @@ exports.Configuration = class Configuration {
     let gemfilePath       = nova.workspace.config.get('rubygems.workspace.gemfileLocation')
     let gemfileHandler    = null
     let gemfileLinesArray = []
-    let gemsObjectArray   = []
 
     if (FUNCTIONS.isWorkspace()) {
       // If no Gemfile set in the workspace preferences, try to open a Gemfile in the root directory.
@@ -62,65 +61,37 @@ exports.Configuration = class Configuration {
       gemfileLinesArray = gemfileHandler.readlines()
       gemfileHandler.close()
 
-      gemsObjectArray = await this._evaluateGemfile(gemfileLinesArray)
+      this._gems = await this._evaluateGemfileLines(gemfileLinesArray)
     }
 
-    return gemsObjectArray
+    return this._gems
   }
 
-  async _evaluateGemfile(gemfileLinesArray) {
+
+
+  async _evaluateGemfileLines(gemfileLinesArray) {
+    let gemNames = []
+
     gemfileLinesArray.forEach((line) => {
-      console.log(line)
-    })
-
-    // let configObject = eval(newContents)
-
-    return //configObject
-  }
-
-  /*
-    Finds Gemfile file within the project directory.
-  */
-  async _findGemfiles() {
-    return new Promise((resolve, reject) => {
-      let returnValue = {
-        status: 0,
-        stdout: [],
-        stderr: [],
-      }
-
-      let path    = FUNCTIONS.normalizePath(nova.workspace.path)
-      let options = {
-        args: ['-name', 'Gemfile', '-onlyin', path]
-      }
-
-      let process = new Process('/usr/bin/mdfind', options)
-
-      process.onStdout((l) => {
-        returnValue.stdout.push(l.trim())
-      })
-
-      process.onStderr((l) => {
-        returnValue.stderr.push(l.trim())
-      })
-
-      process.onDidExit((status) => {
-        returnValue.status = status
-        if (status === 0) {
-          resolve(returnValue)
-        } else {
-          reject(returnValue)
-        }
-      })
-
-      try {
-        process.start()
-      } catch (e) {
-        returnValue.status = 128
-        returnValue.stderr = [e.message]
-        reject(returnValue)
+      if (line.search(/\sgem\s/) >= 0) {
+        let gemName = this._evaluateGemfileLine(line)
+        if (gemName !== null) { gemNames.push (gemName) }
       }
     })
+
+    return gemNames
   }
+
+  _evaluateGemfileLine(line) {
+    let gemName = null
+
+    if (line.trim()[0] !== '#') {
+      gemName = line.trim().match(/(?:('|")[^('|")]*('|")|^[^('|")]*$)/)[0]
+      gemName = gemName.replace(/('|")/g, '')
+    }
+
+    return gemName
+  }
+
 }
 
