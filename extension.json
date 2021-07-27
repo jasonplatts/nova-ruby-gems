@@ -2,7 +2,7 @@
   "identifier": "jasonplatts.rubygems",
   "name": "Ruby Gems",
   "organization": "Jason Platts",
-  "description": "Provides a sidebar with information on gems contained in a project's Gemfile, including alerting the user to outdated versions.",
+  "description": "Provides a sidebar with information on gems contained in a project's Gemfile.",
   "version": "1.0",
   "categories": ["sidebars"],
 
