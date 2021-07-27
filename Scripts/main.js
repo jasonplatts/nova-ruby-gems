@@ -22,8 +22,6 @@ exports.activate = async function() {
 
   try {
     await registerTreeView()
-    // console.log(gemNames)
-    // fetchRubyGems(gemNames[0])
   } catch (error) {
     FUNCTIONS.showConsoleError(error)
   }
@@ -31,6 +29,10 @@ exports.activate = async function() {
 
 exports.deactivate = function() {
   // Clean up state before the extension is deactivated
+}
+
+async function unRegisterTreeView() {
+  // TODO: Add var resets and dispose of disposables.
 }
 
 async function registerTreeView() {
