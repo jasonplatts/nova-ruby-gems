@@ -9,24 +9,44 @@ exports.List = class List {
     this._items    = []
   }
 
+  /*
+    Retrieves information from RubyGems on an array of Gems.
+    Then converts that information into list items.
+  */
   async loadItems() {
     if (FUNCTIONS.isWorkspace()) {
       for (const gemName of this._gemNames) {
-        let apiGemData = await this.fetchRubyGem(gemName)
+        let apiGemData                          = await this.fetchRubyGem(gemName)
 
-        let item       = new ListItem(gemName)
+        let item                                = new ListItem(gemName)
 
-        item.collapsibleState = TreeItemCollapsibleState.Expanded
+        item.collapsibleState                   = TreeItemCollapsibleState.Expanded
+        item.image                              = 'sidebar-list-item'
 
-        let subItem = new ListItem('Latest Version')
-        subItem.descriptiveText = apiGemData.version
-        item.children.push(subItem)
-        item.version = apiGemData.version
-        item.versionDownloads = apiGemData.version_downloads
-        item.authors = apiGemData.authors
+        let subItemInfo                         = new ListItem('Info')
+        subItemInfo.descriptiveText             = apiGemData.info
+        subItemInfo.image                       = 'sidebar-list-sub-item'
+        item.children.push(subItemInfo)
 
-        item.sourceCodeURI = apiGemData.source_code_uri
-        item.gemURI = apiGemData.gem_uri
+        let subItemAuthors                      = new ListItem('Authors')
+        subItemAuthors.descriptiveText          = apiGemData.authors
+        subItemAuthors.image                    = 'sidebar-list-sub-item'
+        item.children.push(subItemAuthors)
+
+        let subItemVersion                      = new ListItem('Latest Version')
+        subItemVersion.descriptiveText          = apiGemData.version
+        subItemVersion.image                    = 'sidebar-list-sub-item'
+        item.children.push(subItemVersion)
+
+        let subItemVersionDownloads             = new ListItem('Version Downloads')
+        subItemVersionDownloads.descriptiveText = apiGemData.version_downloads.toLocaleString('en-US')
+        subItemVersionDownloads.image           = 'sidebar-list-sub-item'
+        item.children.push(subItemVersionDownloads)
+
+        let subItemGemURL                       = new ListItem('Gem URL')
+        subItemGemURL.descriptiveText           = apiGemData.gem_uri
+        subItemGemURL.image                     = 'sidebar-list-sub-item'
+        item.children.push(subItemGemURL)
 
         this._items.push( item )
       }
@@ -35,6 +55,9 @@ exports.List = class List {
     return true
   }
 
+  /*
+    Retrieves information from RubyGems.org for a given Gem name.
+  */
   async fetchRubyGem(gemName) {
     return new Promise((resolve, reject) => {
       // try {
@@ -51,17 +74,10 @@ exports.List = class List {
     })
   }
 
+  /*
+    Returns the list items.
+  */
   get items() {
     return this._items
-  }
-
-  addListItems(items) {
-    items.forEach((item) => {
-      this.addListItem(item)
-    })
-  }
-
-  addListItem(item) {
-    this._items = [...this._items, item]
   }
 }
