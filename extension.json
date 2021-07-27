@@ -50,7 +50,7 @@
               "title": "Open Docs",
               "tooltip": "Open RubyGems.org site in the browser.",
               "image": "__builtin.remote",
-              "command": "openRubyGems.add"
+              "command": "rubygems.openDocs"
             },
             {
               "title": "Refresh",

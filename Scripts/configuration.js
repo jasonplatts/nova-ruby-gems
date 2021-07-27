@@ -15,7 +15,7 @@ exports.Configuration = class Configuration {
     The base URL for RubyGems documentation.
   */
   static get RUBYGEMS_URL() {
-    return 'https://rubgygems.org'
+    return 'https://rubygems.org'
   }
 
   /*
