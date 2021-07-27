@@ -54,13 +54,8 @@
           ],
           "contextCommands": [
             {
-              "title": "Remove",
-              "command": "mysidebar.remove",
-              "when": "viewItem != null"
-            },
-            {
-              "title": "Show in Finder",
-              "command": "mysidebar.showInFinder",
+              "title": "Open URL",
+              "command": "rubygems.doubleclick",
               "when": "viewItem != null"
             }
           ]

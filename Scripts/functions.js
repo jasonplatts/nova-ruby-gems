@@ -46,7 +46,7 @@ exports.showConsoleError = function showConsoleError(error) {
 }
 
 exports.showNotification = function showNotification(title, body) {
-  let notification = new NotificationRequest('todo-notification')
+  let notification = new NotificationRequest('notification')
 
   notification.title   = title
   notification.body    = body

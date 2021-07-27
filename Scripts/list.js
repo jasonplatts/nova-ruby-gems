@@ -45,7 +45,8 @@ exports.List = class List {
           item.children.push(subItemVersionDownloads)
 
           let subItemGemURL                       = new ListItem('Gem URL')
-          subItemGemURL.descriptiveText           = apiGemData.gem_uri
+          subItemGemURL.descriptiveText           = apiGemData.project_uri
+          subItemGemURL.url                       = apiGemData.project_uri
           subItemGemURL.image                     = 'sidebar-list-sub-item'
           item.children.push(subItemGemURL)
 
