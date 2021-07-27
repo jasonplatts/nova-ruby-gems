@@ -4,6 +4,9 @@
   "organization": "Jason Platts",
   "description": "Provides a sidebar with information on gems contained in a project's Gemfile.",
   "version": "1.0",
+  "repository":"https://github.com/jasonplatts/nova-ruby-gems",
+  "bugs":"https://github.com/jasonplatts/nova-ruby-gems/issues",
+  "funding":"https://github.com/sponsors/jasonplatts",
   "categories": ["sidebars"],
 
   "main": "main.js",
