@@ -1,65 +1,76 @@
 {
-    "identifier": "jasonplatts.rubygems",
-    "name": "ruby-gems",
-    "organization": "Jason Platts",
-    "description": "Lorem ipsum, dolor sit amet.",
-    "version": "1.0",
-    "categories": ["sidebars"],
+  "identifier": "jasonplatts.rubygems",
+  "name": "Ruby Gems",
+  "organization": "Jason Platts",
+  "description": "Provides a sidebar with information on gems contained in a project's Gemfile.",
+  "version": "1.0",
+  "repository":"https://github.com/jasonplatts/nova-ruby-gems",
+  "bugs":"https://github.com/jasonplatts/nova-ruby-gems/issues",
+  "funding":"https://github.com/sponsors/jasonplatts",
+  "categories": ["sidebars"],
 
-    "main": "main.js",
+  "main": "main.js",
 
-    "activationEvents": [
-        "onLanguage:javascript"
-    ],
+  "activationEvents": [
+    "*"
+  ],
 
-    "entitlements": {
-        "filesystem": "readwrite", "requests": true
-    },
+  "entitlements": {
+    "filesystem": "readwrite",
+    "requests": true
+  },
 
-    "sidebars": [
+  "config-workspace": [
+    {
+      "key": "rubygems.config.section",
+      "title": "Gemfile Location",
+      "type": "section",
+      "children": [
         {
-            "id": "ruby-gems",
-            "name": "Ruby Gems",
-            "smallImage": "mysidebar-small",
-            "smallSelectedImage": "mysidebar-small-selected",
-            "largeImage": "mysidebar-large",
-            "largeSelectedImage": "mysidebar-large-selected",
-            "sections": [
-                {
-                    "id": "mysidebar",
-                    "name": "Profiles",
-                    "allowMultiple": true,
-                    "placeholderText": "No profiles have been created.",
-                    "placeholderImage": "mysidebar-placeholder",
-                    "headerCommands": [
-                        {
-                            "title": "Add",
-                            "image": "__builtin.add",
-                            "tooltip": "Add a new profile",
-                            "command": "mysidebar.add"
-                        },
-                        {
-                            "title": "Remove",
-                            "image": "__builtin.remove",
-                            "tooltip": "Remove the selected profiles",
-                            "command": "mysidebar.remove",
-                            "when": "viewItem != null"
-                        }
-                    ],
-                    "contextCommands": [
-                        {
-                            "title": "Remove",
-                            "command": "mysidebar.remove",
-                            "when": "viewItem != null"
-                        },
-                        {
-                            "title": "Show in Finder",
-                            "command": "mysidebar.showInFinder",
-                            "when": "viewItem != null"
-                        }
-                    ]
-                }
-            ]
+          "key": "rubygems.workspace.gemfileLocation",
+          "title": "Gemfile Location",
+          "description": "The extension automatically searches for a 'Gemfile' within the current workspace. If you wish to specify its location, you may do so here.",
+          "type": "path"
         }
-    ]
+      ]
+    }
+  ],
+
+  "sidebars": [
+    {
+      "id": "ruby-gems",
+      "name": "Ruby Gems",
+      "smallImage": "sidebar-small",
+      "largeImage": "sidebar-large",
+      "sections": [
+        {
+          "id": "rubygems",
+          "name": "Ruby Gems",
+          "placeholderText": "No 'Gemfile' detected.",
+          "placeholderImage": "sidebar-placeholder",
+          "headerCommands": [
+            {
+              "title": "Open Docs",
+              "tooltip": "Open RubyGems.org site in the browser.",
+              "image": "__builtin.remote",
+              "command": "rubygems.openDocs"
+            },
+            {
+              "title": "Refresh",
+              "image": "__builtin.refresh",
+              "tooltip": "Refresh",
+              "command": "rubygems.refresh"
+            }
+          ],
+          "contextCommands": [
+            {
+              "title": "Open URL",
+              "command": "rubygems.doubleclick",
+              "when": "viewItem != null"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
