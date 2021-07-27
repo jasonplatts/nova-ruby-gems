@@ -1,16 +1,17 @@
 'use strict'
 
-const FUNCTIONS         = require('./functions.js')
-const { Configuration } = require('./configuration.js')
-const { DataProvider }  = require('./data_provider.js')
-const { List }          = require('./list.js')
+const FUNCTIONS          = require('./functions.js')
+const { Configuration }  = require('./configuration.js')
+const { DataProvider }   = require('./data_provider.js')
+const { List }           = require('./list.js')
 
-var config              = null
-var sidebar             = {
+var config               = null
+var sidebar              = {
   list: null,
   dataProvider: null,
   treeView: null
 }
+var extensionDisposables = new CompositeDisposable()
 
 exports.activate = async function() {
   if (nova.inDevMode()) {
@@ -19,26 +20,26 @@ exports.activate = async function() {
   }
 
   try {
-    await registerTreeView()
+    await loadExtension()
   } catch (error) {
     FUNCTIONS.showConsoleError(error)
   }
 }
 
 exports.deactivate = function() {
-  unRegisterTreeView()
+  unloadExtension()
 }
 
-async function unRegisterTreeView() {
+async function unloadExtension() {
   config = null
-
   sidebar.treeView.dispose()
+  extensionDisposables.dispose()
   sidebar.list, sidebar.dataProvider, sidebar.treeView = null
 
   return
 }
 
-async function registerTreeView() {
+async function loadExtension() {
   config = new Configuration()
 
   let gemNames = await config.loadGemfile()
@@ -51,14 +52,15 @@ async function registerTreeView() {
     dataProvider: sidebar.dataProvider
   })
 
+  extensionDisposables.add(nova.workspace.config.onDidChange('rubygems.workspace.gemfileLocation', reloadExtension))
   nova.subscriptions.add(sidebar.treeView)
 
   return
 }
 
-async function reload() {
-  await unRegisterTreeView()
-  await registerTreeView()
+async function reloadExtension() {
+  await unloadExtension()
+  await loadExtension()
 
   sidebar.treeView.refresh()
 
@@ -66,7 +68,7 @@ async function reload() {
 }
 
 nova.commands.register('rubygems.refresh', () => {
-  reload()
+  reloadExtension()
 })
 
 nova.commands.register('rubygems.openDocs', () => {
