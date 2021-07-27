@@ -43,13 +43,20 @@
         {
           "id": "rubygems",
           "name": "Ruby Gems",
-          "placeholderText": "No gemfile detected.",
-          "placeholderImage": "extension500w",
+          "placeholderText": "No 'Gemfile' detected.",
+          "placeholderImage": "sidebar-placeholder",
           "headerCommands": [
             {
               "title": "Open Docs",
               "tooltip": "Open RubyGems.org site in the browser.",
+              "image": "__builtin.remote",
               "command": "openRubyGems.add"
+            },
+            {
+              "title": "Refresh",
+              "image": "__builtin.refresh",
+              "tooltip": "Refresh",
+              "command": "rubygems.refresh"
             }
           ],
           "contextCommands": [
