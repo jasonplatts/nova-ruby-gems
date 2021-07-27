@@ -1,68 +1,30 @@
-<!--
-👋 Hello! As Nova users browse the extensions library, a good README can help them understand what your extension does, how it works, and what setup or configuration it may require.
+# Ruby Gems Extension for Panic's Nova Code Editor
 
-Not every extension will need every item described below. Use your best judgement when deciding which parts to keep to provide the best experience for your new users.
+Provides a sidebar with information on gems contained in a project's Gemfile using RubyGems.org. Built for Panic's macOS code editor, Nova.
 
-💡 Quick Tip! As you edit this README template, you can preview your changes by selecting **Extensions → Activate Project as Extension**, opening the Extension Library, and selecting "ruby-gems" in the sidebar.
+<img src="https://user-images.githubusercontent.com/48892071/127221251-14cc14d3-e45d-4e1b-ac31-341ff007474e.png" width="800" alt="Ruby Gems Nova Extension Screenshot">
 
-Let's get started!
--->
+Thank you to RubyGems.org and its contributors! *This extension is not created, maintained, or endorsed by RubyGems.org. To request features or report bugs, please see the section below.*
 
-<!--
-🎈 Include a brief description of the features your extension provides. For example:
--->
+## Prerequisites
 
-**ruby-gems** provides sidebar integration with **A Helpful Tool**, including the most important feature, something that's really helpful, and _a little-known secret!_
-
-<!--
-🎈 It can also be helpful to include a screenshot or GIF showing your extension in action:
--->
-
-![](https://nova.app/images/en/dark/sidebar.png)
-
-## Requirements
-
-<!--
-🎈 If your extension depends on external processes or tools that users will need to have, it's helpful to list those and provide links to their installers:
--->
-
-ruby-gems requires some additional tools to be installed on your Mac:
-
-- [Node.js 8.2.0](https://nodejs.org) and NPM 5.2.0 or newer
-
-<!--
-✨ Providing tips, tricks, or other guides for installing or configuring external dependencies can go a long way toward helping your users have a good setup experience:
--->
-
-> To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that completes, double-click the **.pkg** installer to begin installation.
+There are no prerequisites for this extension.
 
 ## Usage
 
-<!--
-🎈 If your extension provides features that are invoked manually, consider describing those options for users:
--->
+Enable the extension in the extension library within Nova.
 
-To run ruby-gems:
+<img src="https://user-images.githubusercontent.com/48892071/127221912-3abb50a1-036d-4cae-86cf-67dd9831e461.png" width="800" alt="Ruby Gems Nova Extension Screenshot">
 
-- Select the **Editor → ruby-gems** menu item; or
-- Open the command palette and type `ruby-gems`
+## Configuration
 
-<!--
-🎈 Alternatively, if your extension runs automatically (as in the case of a validator), consider showing users what they can expect to see.
--->
+The Ruby Gems extension will search for a 'Gemfile' in the root directory of the project unless a 'Gemfile' location is specified in the workspace preferences.
 
-### Configuration
+### Workspace Configuration
+To specify a 'Gemfile' location, go to the workspace preferences, select Ruby Gems, and choose a file. Simply delete the path if you wish to for the extension to automatically find and include the default 'Gemfile' from the root directory again.
 
-<!--
-🎈 If your extension offers global- or workspace-scoped preferences, consider pointing users toward those settings. For example:
--->
+<img src="https://user-images.githubusercontent.com/48892071/127221966-22bd9c96-60cf-46eb-878e-22dbf3b31b67.png" width="800" alt="Ruby Gems Workspace Preferences">
 
-To configure global preferences, open **Extensions → Extension Library...** then select ruby-gems's **Preferences** tab.
+## Report a Bug or Feature Request
 
-You can also configure preferences on a per-project basis in **Project → Project Settings...**
-
-<!--
-👋 That's it! Happy developing!
-
-P.S. If you'd like, you can remove these comments before submitting your extension 😉
--->
+To report a bug or request a feature, please add an issue to the GitHub repository. Thanks!
