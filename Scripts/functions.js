@@ -41,7 +41,7 @@ exports.normalizePath = function normalizePath(path) {
   Format extension errors in the console.
 */
 exports.showConsoleError = function showConsoleError(error) {
-  let prefix = 'TODO Extension --'
+  let prefix = 'Ruby Gems Extension --'
   console.error(prefix, error)
 }
 
@@ -74,18 +74,4 @@ exports.cleanArray = function cleanArray(array) {
   }
 
   return array
-}
-
-/*
-  This is a purely development related function to loop through list items, returning useful data.
-*/
-exports.dig = function dig(listItems) {
-  console.log('---------- DIAGNOSTICS SRT ---------- ')
-
-  listItems.forEach((item, index) => {
-    console.log(`Index: ${index} Name: ${item.name}, Path: ${item.path}, Comment: ${item.comment}`)
-  })
-
-  console.log('# Elements:', listItems.length)
-  console.log('---------- DIAGNOSTICS END ---------- ')
 }

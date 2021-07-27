@@ -42,7 +42,7 @@
       "sections": [
         {
           "id": "rubygems",
-          "name": "Installed Ruby Gems",
+          "name": "Ruby Gems",
           "placeholderText": "No gemfile detected.",
           "placeholderImage": "extension500w",
           "headerCommands": [
