@@ -26,15 +26,20 @@ exports.activate = async function() {
 }
 
 exports.deactivate = function() {
-  // Clean up state before the extension is deactivated
+  unRegisterTreeView()
 }
 
 async function unRegisterTreeView() {
-  // TODO: Add var resets and dispose of disposables.
+  config = null
+
+  sidebar.treeView.dispose()
+  sidebar.list, sidebar.dataProvider, sidebar.treeView = null
+
+  return
 }
 
 async function registerTreeView() {
-  config  = new Configuration()
+  config = new Configuration()
 
   let gemNames = await config.loadGemfile()
   sidebar.list = new List(gemNames)
@@ -42,7 +47,7 @@ async function registerTreeView() {
   await sidebar.list.loadItems()
 
   sidebar.dataProvider = new DataProvider(sidebar.list.items)
-  sidebar.treeView = new TreeView('rubygems', {
+  sidebar.treeView     = new TreeView('rubygems', {
     dataProvider: sidebar.dataProvider
   })
 
@@ -50,6 +55,19 @@ async function registerTreeView() {
 
   return
 }
+
+async function reload() {
+  await unRegisterTreeView()
+  await registerTreeView()
+
+  sidebar.treeView.refresh()
+
+  return
+}
+
+nova.commands.register('rubygems.refresh', () => {
+  reload()
+})
 
 nova.commands.register('rubygems.openDocs', () => {
   nova.openURL(Configuration.RUBYGEMS_URL)
