@@ -3,7 +3,7 @@
 const FUNCTIONS = require('./functions.js')
 
 /*
-  Class handles the retrieval of default and user preference configurations
+  Class handles the retrieval of user preferences and, if found, loads a Gemfile.
 */
 exports.Configuration = class Configuration {
   constructor() {
@@ -12,17 +12,14 @@ exports.Configuration = class Configuration {
   }
 
   /*
-    The base URL for Tailwind documentation.
+    The base URL for RubyGems documentation.
   */
   static get RUBYGEMS_URL() {
     return 'https://rubgygems.org'
   }
 
   /*
-    Gets Tailwind CSS class definitions in the form of an array Category objects,
-    each containing an array of SubCategory objects with an array of Tailwind
-    UtilityClass objects. The Tailwind UtilityClass objects have a label, detail,
-    and documentation property.
+    Gets gem information form of an array of list item objects with sub-item objects.
   */
   get gems() {
     return this._gems
@@ -37,7 +34,7 @@ exports.Configuration = class Configuration {
     let gemfileLinesArray = []
 
     if (FUNCTIONS.isWorkspace()) {
-      // If no Gemfile set in the workspace preferences, try to open a Gemfile in the root directory.
+      // If no Gemfile is set in the workspace preferences, try to open one in the root directory.
       if (gemfilePath == null) {
         try {
           gemfileHandler = nova.fs.open(`${FUNCTIONS.normalizePath(nova.workspace.path)}/Gemfile`)
@@ -67,6 +64,9 @@ exports.Configuration = class Configuration {
     return this._gems
   }
 
+  /*
+    Evaluates each line in a Gemfile for gem information.
+  */
   async _evaluateGemfileLines(gemfileLinesArray) {
     let gemNames = []
 
@@ -80,6 +80,9 @@ exports.Configuration = class Configuration {
     return gemNames
   }
 
+  /*
+    Evaluates a single line in a Gemfile for gem information.
+  */
   _evaluateGemfileLine(line) {
     let gemName = null
 
