@@ -47,12 +47,17 @@ exports.ListItem = class ListItem {
     this.path             = null
     this.tooltip          = ''
 
-    this.tag              = null
-    this.remote           = false
-    this.line             = null
-    this.column           = null
-    this.position         = null
-    this.comment          = null
+    this.version = null
+    this.versionDownloads = null
+    this.authors = null
+    this.sourceCodeURI    = null
+    this.gemURI           = null
+    // this.tag              = null
+    // this.remote           = false
+    // this.line             = null
+    // this.column           = null
+    // this.position         = null
+    // this.comment          = null
 
     this.children         = []
     this.parent           = null

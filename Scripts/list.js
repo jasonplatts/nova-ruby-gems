@@ -1,156 +1,58 @@
 'use strict'
 
-const FUNCTIONS           = require('./functions.js')
-const { Configuration }   = require('./configuration.js')
+const FUNCTIONS    = require('./functions.js')
+const { ListItem } = require('./list_item.js')
 
 exports.List = class List {
-  constructor() {
-    this._config = null
-    this._items  = []
-  }
-
-  async loadConfig() {
-    let config   = new Configuration()
-    this._config = await config.load()
-
-    return true
+  constructor(gemNames) {
+    this._gemNames = gemNames
+    this._items    = []
   }
 
   async loadItems() {
-    await this.loadConfig()
-
     if (FUNCTIONS.isWorkspace()) {
-      this._items = await this.loadWorkspaceEnvironment()
-    } else {
-      this._items = await this.loadNonWorkspaceEnvironment()
+      for (const gemName of this._gemNames) {
+        let apiGemData = await this.fetchRubyGem(gemName)
+
+        let item       = new ListItem(gemName)
+
+        item.collapsibleState = TreeItemCollapsibleState.Expanded
+
+        let subItem = new ListItem('Latest Version')
+        subItem.descriptiveText = apiGemData.version
+        item.children.push(subItem)
+        item.version = apiGemData.version
+        item.versionDownloads = apiGemData.version_downloads
+        item.authors = apiGemData.authors
+
+        item.sourceCodeURI = apiGemData.source_code_uri
+        item.gemURI = apiGemData.gem_uri
+
+        this._items.push( item )
+      }
     }
 
     return true
   }
 
-  async loadWorkspaceEnvironment() {
-    let listItems         = []
-    let workspaceSearch   = new WorkspaceSearch(nova.workspace.path, this._config)
-    let filteredFilePaths = FUNCTIONS.filterFilePathArray(await workspaceSearch.search(), this._config)
+  async fetchRubyGem(gemName) {
+    return new Promise((resolve, reject) => {
+      // try {
+      fetch(`https://rubygems.org/api/v1/gems/${gemName}.json`)
+        .then(response => response.json())
+        .then(data => {
+          resolve(data)
+        })
+      // } catch (error) {
+      //   FUNCTIONS.showConsoleError(error)
+      //   reject(error)
+      // }
 
-    filteredFilePaths.forEach((filePath) => {
-      let documentSearch = new DocumentSearch(this._config)
-      listItems = [...listItems, ...documentSearch.searchFile(filePath)]
     })
-
-    return listItems
-  }
-
-  async loadNonWorkspaceEnvironment() {
-    let openDocuments = nova.workspace.textDocuments
-
-    openDocuments = FUNCTIONS.filterOpenDocumentArray(openDocuments, this._config)
-
-    let listItems = []
-
-    openDocuments.forEach((textDocument) => {
-      let documentSearch = new DocumentSearch(this._config)
-      listItems = [...listItems, ...documentSearch.searchOpenDocument(textDocument)]
-    })
-
-    return listItems
-  }
-
-  toggleGroupBy() {
-    this._config.toggleGroupBy()
-  }
-
-  get config() {
-    return this._config
   }
 
   get items() {
-    if (this._items.length > 0) {
-      let group        = null
-      let groupeditems = []
-
-      this.sortItemsByFileName()
-
-      group        = new Group()
-      groupeditems = group.groupListItems(this._items, this._config.groupBy)
-
-      return groupeditems
-    } else {
-      return this._items
-    }
-  }
-
-  async updateOnChange(textEditor) {
-    // For non-workspace environments, the updateOnChange method will be called before
-    // the list.loadItems that otherwise loads the config.
-    if (this._config === null) {
-      await this.loadConfig()
-    }
-
-    let fileExcluded          = FUNCTIONS.isExcluded(textEditor.document.path, this._config)
-    let detectListChange      = new Change(textEditor.document, this._config)
-    let documentInCurrentList = detectListChange.documentPathExistsInList(this._items, textEditor.document)
-    let updateOccurred        = false
-
-    if (fileExcluded) {
-      // File can be ignored as it is excluded and does not exist in list items.
-      if (documentInCurrentList) {
-        this.removeListItemsByFile(textEditor.document.path)
-
-        updateOccurred = true
-      }
-    } else if (!fileExcluded) {
-      let listItemsChanged         = detectListChange.hasListItemsChanged(this._items)
-      let documentSearch           = new DocumentSearch(this._config)
-      let updatedDocumentListItems = documentSearch.searchOpenDocument(textEditor.document)
-
-      // File can be ignored if not in current list and has no tags detected
-      // File can also be ignored if not in current list or tags have not changed.
-      if (documentInCurrentList && listItemsChanged) {
-        this.removeListItemsByFile(textEditor.document.path)
-        this.addListItems(updatedDocumentListItems)
-
-        updateOccurred = true
-      } else if (!documentInCurrentList && updatedDocumentListItems.length > 0) {
-        this.addListItems(updatedDocumentListItems)
-        updateOccurred = true
-      }
-    }
-
-    return updateOccurred
-  }
-
-  /*
-    Sorts the list items according to file name.
-  */
-  sortItemsByFileName() {
-    this._items.sort(function(itemA, itemB) {
-      // The path.split('/').pop() returns the file name from the file path.
-      let fileNameA = itemA.path.split('/').pop().toLowerCase()
-      let fileNameB = itemB.path.split('/').pop().toLowerCase()
-
-      if (fileNameA < fileNameB) {
-        return -1
-      }
-
-      if (fileNameA > fileNameB) {
-        return 1
-      }
-
-      // File names are equal
-      return 0
-    })
-  }
-
-  /*
-    Removes existing list items with a specific file path.
-  */
-  removeListItemsByFile(filePath) {
-    this._items = this._items.filter((item) => {
-      if (FUNCTIONS.normalizePath(item.path) !== FUNCTIONS.normalizePath(filePath)) {
-        return item
-      }
-    })
+    return this._items
   }
 
   addListItems(items) {

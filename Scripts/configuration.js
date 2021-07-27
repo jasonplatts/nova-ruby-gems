@@ -67,13 +67,11 @@ exports.Configuration = class Configuration {
     return this._gems
   }
 
-
-
   async _evaluateGemfileLines(gemfileLinesArray) {
     let gemNames = []
 
     gemfileLinesArray.forEach((line) => {
-      if (line.search(/\sgem\s/) >= 0) {
+      if (line.search(/gem\s/) >= 0) {
         let gemName = this._evaluateGemfileLine(line)
         if (gemName !== null) { gemNames.push (gemName) }
       }
