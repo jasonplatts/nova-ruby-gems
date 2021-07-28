@@ -38,11 +38,7 @@ exports.Configuration = class Configuration {
       if (gemfilePath == null) {
         try {
           gemfileHandler = nova.fs.open(`${FUNCTIONS.normalizePath(nova.workspace.path)}/Gemfile`)
-        } catch (error) {
-          console.log(
-            'No \'Gemfile\' could be found in the root directory of this project. Please go to the ' +
-            'extension preferences and set the location of the \'Gemfile\' for this project.')
-        }
+        } catch (error) { }
       } else {
         try {
           gemfileHandler = nova.fs.open(`${FUNCTIONS.normalizePath(gemfilePath)}`)
