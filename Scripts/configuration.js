@@ -39,7 +39,7 @@ exports.Configuration = class Configuration {
         try {
           gemfileHandler = nova.fs.open(`${FUNCTIONS.normalizePath(nova.workspace.path)}/Gemfile`)
         } catch (error) {
-          FUNCTIONS.showConsoleError(
+          console.log(
             'No \'Gemfile\' could be found in the root directory of this project. Please go to the ' +
             'extension preferences and set the location of the \'Gemfile\' for this project.')
         }
@@ -47,7 +47,7 @@ exports.Configuration = class Configuration {
         try {
           gemfileHandler = nova.fs.open(`${FUNCTIONS.normalizePath(gemfilePath)}`)
         } catch (error) {
-          FUNCTIONS.showConsoleError(
+          console.log(
             'The \'Gemfile\' location set in the workspace preferences could not be found. Please check ' +
             'the location and try again.')
         }
